@@ -20,7 +20,7 @@ export const Process = (props: ProcessType) => {
   }
 
   const onClickAddNewJob = () => {
-    dispatch(addJobTC())
+    // dispatch(addJobTC())
   }
   return (
     <div>
@@ -35,7 +35,6 @@ export const Process = (props: ProcessType) => {
                                                                 processId={job.processId}
                                                                 name={job.name}
                                                                 status={job.status}
-
         />
       )}
     </div>

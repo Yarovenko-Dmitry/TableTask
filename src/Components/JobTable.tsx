@@ -1,24 +1,32 @@
 import {Button, Input, Space, Table} from 'antd';
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {AppRootStateType} from '../app/store';
 import {JobType} from './Job';
 import {removeProcessTC} from '../Redux/process-reducer';
-import { SearchOutlined } from '@ant-design/icons';
-// import Highlighter from 'react-highlight-words';
+import {SearchOutlined} from '@ant-design/icons';
+import Highlighter from 'react-highlight-words';
 
 export const JobTable = (props: any) => {
   const jobsList = useSelector<AppRootStateType, Array<JobType>>((state) => state.jobs);
-  console.log(jobsList);
+  console.log('jobsList', jobsList);
+  const filtredJobsList = useSelector<AppRootStateType, Array<JobType>>((state) => state.jobs);
+  console.log('filtredJobsList', filtredJobsList);
+
+  const inputEl = useRef(null)
+
+  useEffect(() => {
+    props.setcurrentRowId(props.currentRowId)
+    console.log('CurrentRowRd from Job Table', props.currentRowId)
+  }, [])
 
   const [searchText, setSearchText] = useState<string>('');
   const [searchedColumn, setSearchedColumn] = useState<string>('');
 
-
- const handleSearch = (selectedKeys: any, confirm: any, dataIndex: any) => {
+  const handleSearch = (selectedKeys: any, confirm: any, dataIndex: any) => {
     confirm();
-   setSearchText(selectedKeys[0]);
-   setSearchedColumn(dataIndex);
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
   };
 
   const handleReset = (clearFilters: any) => {
@@ -26,79 +34,78 @@ export const JobTable = (props: any) => {
     setSearchText('');
   };
 
-  // const getColumnSearchProps = (dataIndex: any) => ({
-  //
-  //   filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }:any) => (
-  //     <div style={{ padding: 8 }}>
-  //       <Input
-  //         ref={(node: Input )=> {
-  //           const searchInput: Input = node;
-  //         }}
-  //         placeholder={`Search ${dataIndex}`}
-  //         value={selectedKeys[0]}
-  //         onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-  //         onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-  //         style={{ width: 188, marginBottom: 8, display: 'block' }}
-  //       />
-  //       <Space>
-  //         <Button
-  //           type="primary"
-  //           onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-  //           icon={<SearchOutlined />}
-  //           size="small"
-  //           style={{ width: 90 }}
-  //         >
-  //           Search
-  //         </Button>
-  //         <Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-  //           Reset
-  //         </Button>
-  //       </Space>
-  //     </div>
-  //   ),
-  //   filterIcon: (filtered: any) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-  //   onFilter: (value: any, record: any) =>
-  //     record[dataIndex]
-  //       ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
-  //       : '',
-  //   onFilterDropdownVisibleChange: (visible: any) => {
-  //     if (visible) {
-  //       setTimeout(() => searchInput.select(), 100);
-  //     }
-  //   },
-  //   render: (text: any) =>
-  //     searchedColumn === dataIndex ? (
-  //       <Highlighter
-  //         highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-  //         searchWords={[searchText]}
-  //         autoEscape
-  //         textToHighlight={text ? text.toString() : ''}
-  //       />
-  //     ) : (
-  //       text
-  //     ),
-  // });
+  const getColumnSearchProps = (dataIndex: any) => ({
 
+    filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}: any) => (
+      <div style={{padding: 8}}>
+        <Input
+          ref={inputEl}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{width: 188, marginBottom: 8, display: 'block'}}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined/>}
+            size="small"
+            style={{width: 90}}
+          >
+            Search
+          </Button>
+          <Button onClick={() => handleReset(clearFilters)} size="small" style={{width: 90}}>
+            Reset
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: any) => <SearchOutlined style={{color: filtered ? '#1890ff' : undefined}}/>,
+    onFilter: (value: any, record: any) =>
+      record[dataIndex]
+        ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
+        : '',
+    onFilterDropdownVisibleChange: (visible: any) => {
+      if (visible) {
+        // setTimeout(() => inputEl.select(), 100);
+      }
+    },
+    render: (text: any) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{backgroundColor: '#ffc069', padding: 0}}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
 
   const columns: any = [
     {
       title: 'Id',
       dataIndex: 'id',
       key: 'id',
-      sorter: (a: JobType, b:JobType) => {
+      sorter: (a: JobType, b: JobType) => {
         if (a.id.toLowerCase() < b.id.toLowerCase()) return -1;
         else if (a.id.toLowerCase() > b.id.toLowerCase()) return 1;
-        return 0; },
+        return 0;
+      },
       ellipsis: true,
     },
     {
       title: 'ProcessId',
       dataIndex: 'processId',
       key: 'processId',
-      sorter: (a: JobType, b:JobType) => {
+      sorter: (a: JobType, b: JobType) => {
         if (a.processId.toLowerCase() < b.processId.toLowerCase()) return -1;
         else if (a.processId.toLowerCase() > b.processId.toLowerCase()) return 1;
-        return 0; },
+        return 0;
+      },
       ellipsis: true,
     },
     {
@@ -108,18 +115,20 @@ export const JobTable = (props: any) => {
       sorter: (a: JobType, b: JobType) => {
         if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
         else if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-        return 0; },
+        return 0;
+      },
       ellipsis: true,
-      // getColumnSearchProps('name')
+      ...getColumnSearchProps('name')
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      sorter: (a: JobType, b:JobType) => {
+      sorter: (a: JobType, b: JobType) => {
         if (a.status.toLowerCase() < b.status.toLowerCase()) return -1;
         else if (a.status.toLowerCase() > b.status.toLowerCase()) return 1;
-        return 0; },
+        return 0;
+      },
       ellipsis: true,
     },
     {
@@ -127,7 +136,7 @@ export const JobTable = (props: any) => {
       dataIndex: 'removeJob',
       key: 'removeJob',
 
-      render: (text: any, record: any ) => <button
+      render: (text: any, record: any) => <button
         name={'removeJob'}
         onClick={() => {
           removeProcessTC(record.id)
@@ -135,7 +144,6 @@ export const JobTable = (props: any) => {
         }}>Remove job</button>
     }
   ];
-
 
   return (
     <div>

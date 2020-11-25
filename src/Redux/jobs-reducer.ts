@@ -36,19 +36,12 @@ const jobStatus: Array<StatusType> = ['running', 'successed', 'failed'];
 export const jobsReducer = (state: Array<JobType> = initialState, action: ActionsType): Array<JobType> => {
   switch (action.type) {
     case 'ADD-JOB': {
-      const newJob: JobType = {
-        id: v1(),
-        processId: 'test',
-        name: randomString(),
-        status: jobStatus[randomNumber(0, 2)]
-      }
-      return [newJob, ...state]
+      return [action.newJob, ...state]
     }
 
     case 'REMOVE-JOB': {
-      return state.filter(tl => tl.id != action.id)
+      return state.filter(tl => tl.id != action.processId)
     }
-
     default: {
       // debugger
       return state
@@ -56,18 +49,28 @@ export const jobsReducer = (state: Array<JobType> = initialState, action: Action
   }
 }
 
-export const addJobAC = () => ({type: 'ADD-JOB',} as const)
-export const removeJobAC = (id: string) => ({type: 'REMOVE-JOB', id} as const)
+export const addJobAC = (newJob: JobType) => ({type: 'ADD-JOB', newJob} as const)
+export const removeJobAC = (processId: string) => ({type: 'REMOVE-JOB', processId} as const)
 
-export const addJobTC = () => {
+export const addJobTC = (processId: string, newProcessJobsCount: number) => {
   return (dispatch: ThunkDispatch) => {
-    dispatch(addJobAC())
+
+
+    for (let i = 0; i < newProcessJobsCount; i++) {
+      const newJob: JobType = {
+        id: v1(),
+        processId: processId,
+        name: randomString(),
+        status: jobStatus[randomNumber(0, 2)],
+      }
+      dispatch(addJobAC(newJob))
+    }
   }
 }
 
-export const removeJobTC = (id: string) => {
+export const removeJobTC = (processId: string) => {
   return (dispatch: ThunkDispatch) => {
-    dispatch(removeJobAC(id))
+    dispatch(removeJobAC(processId))
   }
 }
 

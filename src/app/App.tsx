@@ -8,11 +8,11 @@ import {ProcessTable} from '../Components/ProcessTable';
 import {addJobTC} from '../Redux/jobs-reducer';
 
 // + просмотр списка процессов
-// - просмотр списка джоб каждого из процессов
+// + просмотр списка джоб каждого из процессов
 // + создание нового процесса
 // + сортировка процессов по всем полям
-// - поиск джобы по имени
-// - удаление процесса, включая все его джобы
+// + поиск джобы по имени
+// + удаление процесса, включая все его джобы
 // - сохранение и загрузка данных с сервака или localStorage
 
 const App = () => {
@@ -29,9 +29,9 @@ const App = () => {
     dispatch(addProcessTC())
   };
 
-  const onClickAddNewJob = () => {
-    dispatch(addJobTC())
-  };
+  // const onClickAddNewJob = () => {
+  //   // dispatch(addJobTC())
+  // };
 
   return (
     <div className="App">
@@ -49,7 +49,7 @@ const App = () => {
         <input type={'button'}
                name={'addNewJob'}
                value={'Add new job'}
-               onClick={onClickAddNewJob}
+               // onClick={onClickAddNewJob}
         />
         <ProcessTable/>
       </div>

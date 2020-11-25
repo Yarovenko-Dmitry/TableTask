@@ -4,33 +4,15 @@ import {ProcessType} from './Process';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../app/store';
 import {JobTable} from './JobTable';
-import {removeJobTC} from '../Redux/jobs-reducer';
 import {removeProcessTC} from '../Redux/process-reducer';
 
 export const ProcessTable = () => {
   const dispatch = useDispatch()
   const processList = useSelector<AppRootStateType, Array<ProcessType>>((state) => state.process);
-  console.log(processList);
-  const [sortedInfo, setSortedInfo] = useState<any>('');
+  // console.log(processList);
 
-  const handleChange = (pagination: any, sorter: any) => {
-    setSortedInfo(sorter);
-  };
-
-  const clearAll = () => {
-    setSortedInfo('');
-  };
-
-  const setAgeSort = () => {
-    setSortedInfo({
-      order: 'descend',
-      columnKey: 'startTime',
-    });
-  };
-
-  const onClickRemoveProcessBatton = () => {
-    dispatch(removeJobTC('tastId'))
-  }
+  const [currentRowId, setcurrentRowId] = useState<string>('')
+  console.log('CurrentRowRd from Process Table', currentRowId)
 
   const columns: any = [
     {
@@ -65,7 +47,7 @@ export const ProcessTable = () => {
       render: (text: any, record: any ) => <button
         name={'removeProcess'}
         onClick={() => {
-          removeProcessTC(record.id)
+          dispatch(removeProcessTC(record.id))
           console.log('recordKEY ', record.id)
         }}>Remove process</button>
     },
@@ -84,7 +66,7 @@ export const ProcessTable = () => {
              onChange={onChange}
              rowKey={record => record.id}
              expandable={{
-               expandedRowRender: record => <JobTable processId={record.id} jobsCountNumber={+record.jobsCount}/>,
+               expandedRowRender: record => <JobTable setcurrentRowId={setcurrentRowId} currentRowId={record.id} processId={record.id} jobsCountNumber={+record.jobsCount}/>,
                rowExpandable: record => record.name !== 'Not Expandable',
                expandRowByClick: false
              }}
