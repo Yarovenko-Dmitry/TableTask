@@ -9,10 +9,9 @@ import {removeProcessTC} from '../Redux/process-reducer';
 export const ProcessTable = () => {
   const dispatch = useDispatch()
   const processList = useSelector<AppRootStateType, Array<ProcessType>>((state) => state.process);
-  // console.log(processList);
 
-  const [currentRowId, setcurrentRowId] = useState<string>('')
-  console.log('CurrentRowRd from Process Table', currentRowId)
+  const [currentRowId, setcurrentRowId] = useState<string>('');
+  // console.log('CurrentRowRd from Process Table', currentRowId)
 
   const columns: any = [
     {
@@ -22,7 +21,8 @@ export const ProcessTable = () => {
       sorter: (a: ProcessType, b: ProcessType) => {
         if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
         else if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-        return 0; },
+        return 0;
+      },
       ellipsis: true,
     },
     {
@@ -44,7 +44,7 @@ export const ProcessTable = () => {
       dataIndex: 'removeProcess',
       key: 'removeProcess',
 
-      render: (text: any, record: any ) => <button
+      render: (text: any, record: any) => <button
         name={'removeProcess'}
         onClick={() => {
           dispatch(removeProcessTC(record.id))
@@ -56,7 +56,6 @@ export const ProcessTable = () => {
     console.log('params', sorter);
   }
 
-
   return (
     <div>
       <Space style={{marginBottom: 16}}>
@@ -66,7 +65,10 @@ export const ProcessTable = () => {
              onChange={onChange}
              rowKey={record => record.id}
              expandable={{
-               expandedRowRender: record => <JobTable setcurrentRowId={setcurrentRowId} currentRowId={record.id} processId={record.id} jobsCountNumber={+record.jobsCount}/>,
+               expandedRowRender: record => <JobTable setcurrentRowId={setcurrentRowId}
+                                                      currentRowId={record.id}
+                                                      processId={record.id}
+                                                      jobsCountNumber={+record.jobsCount}/>,
                rowExpandable: record => record.name !== 'Not Expandable',
                expandRowByClick: false
              }}

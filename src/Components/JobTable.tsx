@@ -10,7 +10,8 @@ import Highlighter from 'react-highlight-words';
 export const JobTable = (props: any) => {
   const jobsList = useSelector<AppRootStateType, Array<JobType>>((state) => state.jobs);
   console.log('jobsList', jobsList);
-  const filtredJobsList = useSelector<AppRootStateType, Array<JobType>>((state) => state.jobs);
+  const filtredJobsList = useSelector<AppRootStateType, Array<JobType>>((state) =>
+    state.jobs.filter(tl => tl.processId == props.currentRowId));
   console.log('filtredJobsList', filtredJobsList);
 
   const inputEl = useRef(null)
@@ -149,7 +150,7 @@ export const JobTable = (props: any) => {
     <div>
       <Table columns={columns}
              rowKey={record => record.id}
-             dataSource={jobsList}
+             dataSource={filtredJobsList}
              pagination={false}
       />
     </div>
