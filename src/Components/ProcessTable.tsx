@@ -1,59 +1,24 @@
-import {Button, Space, Table} from 'antd';
+import {Space, Table} from 'antd';
 import React, {useState} from 'react';
-import {v1} from 'uuid';
 import {ProcessType} from './Process';
-
-const tableData: Array<ProcessType> = [
-  {
-    id: v1(),
-    name: 'John Brown',
-    startTime: 31,
-    jobsCount: 111,
-  },
-  {
-    id: v1(),
-    name: 'Jim Green',
-    startTime: 42,
-    jobsCount: 222,
-  },
-  {
-    id: v1(),
-    name: 'Joe Black',
-    startTime: 38,
-    jobsCount: 888,
-  },
-  {
-    id: v1(),
-    name: 'Jim Red',
-    startTime: 39,
-    jobsCount: 999,
-  },
-];
-
-type SortedInfoType = {
-  order: string,
-  columnKey: keyof ProcessType,
-}
+import {useDispatch, useSelector} from 'react-redux';
+import {AppRootStateType} from '../app/store';
+import {JobTable} from './JobTable';
+import {removeJobTC} from '../Redux/jobs-reducer';
+import {removeProcessTC} from '../Redux/process-reducer';
 
 export const ProcessTable = () => {
-  const [filteredInfo, setFilteredInfo] = useState<ProcessType | null>(null);
-  const [sortedInfo, setSortedInfo] = useState<SortedInfoType | null>(null);
+  const dispatch = useDispatch()
+  const processList = useSelector<AppRootStateType, Array<ProcessType>>((state) => state.process);
+  console.log(processList);
+  const [sortedInfo, setSortedInfo] = useState<any>('');
 
-
-  const handleChange = (pagination: any, filters:  any, sorter: any) => {
-    console.log('Various parameters', pagination, filters, sorter);
-    setFilteredInfo(filters);
+  const handleChange = (pagination: any, sorter: any) => {
     setSortedInfo(sorter);
-
-  };
-
-  const clearFilters = () => {
-    setFilteredInfo(null);
   };
 
   const clearAll = () => {
-    setFilteredInfo(null);
-    setSortedInfo(null);
+    setSortedInfo('');
   };
 
   const setAgeSort = () => {
@@ -61,59 +26,70 @@ export const ProcessTable = () => {
       order: 'descend',
       columnKey: 'startTime',
     });
-
   };
 
+  const onClickRemoveProcessBatton = () => {
+    dispatch(removeJobTC('tastId'))
+  }
 
-  // sortedInfo = sortedInfo || {};
-  // filteredInfo = filteredInfo || {};
-  const columns: any= [
+  const columns: any = [
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      filters: [
-        {text: 'Joe', value: 'Joe'},
-        {text: 'Jim', value: 'Jim'},
-      ],
-      // filteredValue: filteredInfo.name || null,
-      filteredValue: filteredInfo?.name || null,
-      onFilter: (value: any, record: any) => record.name.includes(value),
-      sorter: (a: any, b: any) => a.name.length - b.name.length,
-      sortOrder: sortedInfo?.columnKey === 'name' && sortedInfo.order,
+      sorter: (a: ProcessType, b: ProcessType) => {
+        if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+        else if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
+        return 0; },
       ellipsis: true,
     },
     {
       title: 'Start time',
       dataIndex: 'startTime',
       key: 'startTime',
-      sorter: (a: any, b: any) => a.age - b.age,
-      sortOrder: sortedInfo?.columnKey === 'startTime' && sortedInfo.order,
+      sorter: (a: ProcessType, b: ProcessType) => a.startTime - b.startTime,
       ellipsis: true,
     },
     {
       title: 'Jobs count',
       dataIndex: 'jobsCount',
       key: 'jobsCount',
-      filters: [
-        {text: 'London', value: 'London'},
-        {text: 'New York', value: 'New York'},
-      ],
-      filteredValue: filteredInfo?.jobsCount || null,
-      onFilter: (value: any, record: any) => record.address.includes(value),
-      sorter: (a: any, b: any) => a.address.length - b.address.length,
-      sortOrder: sortedInfo?.columnKey === 'jobsCount' && sortedInfo.order,
+      sorter: (a: ProcessType, b: ProcessType) => a.jobsCount - b.jobsCount,
       ellipsis: true,
     },
+    {
+      title: 'Remove process',
+      dataIndex: 'removeProcess',
+      key: 'removeProcess',
+
+      render: (text: any, record: any ) => <button
+        name={'removeProcess'}
+        onClick={() => {
+          removeProcessTC(record.id)
+          console.log('recordKEY ', record.id)
+        }}>Remove process</button>
+    },
   ];
+  const onChange = (sorter: any) => {
+    console.log('params', sorter);
+  }
+
+
   return (
-    <>
+    <div>
       <Space style={{marginBottom: 16}}>
-        <Button onClick={setAgeSort}>Sort age</Button>
-        <Button onClick={clearFilters}>Clear filters</Button>
-        <Button onClick={clearAll}>Clear filters and sorters</Button>
       </Space>
-      <Table columns={columns} dataSource={tableData} onChange={handleChange}/>
-    </>
+      <Table dataSource={processList}
+             columns={columns}
+             onChange={onChange}
+             rowKey={record => record.id}
+             expandable={{
+               expandedRowRender: record => <JobTable processId={record.id} jobsCountNumber={+record.jobsCount}/>,
+               rowExpandable: record => record.name !== 'Not Expandable',
+               expandRowByClick: false
+             }}
+             pagination={false}
+      />
+    </div>
   )
 }

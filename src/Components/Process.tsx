@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {v1} from 'uuid';
 import {addJobTC} from '../Redux/jobs-reducer';
 import {Job, JobType} from './Job';
 import {useDispatch, useSelector} from 'react-redux';
@@ -19,15 +18,9 @@ export const Process = (props: ProcessType) => {
   const showJobsList = () => {
     setIsShowingJobsList(!isShowingJobsList)
   }
-  const ONEjobTEST: JobType = {
-    id: v1(),
-    processId: "TEST",
-    name: 'TESTstring3TEST',
-    status: 'failed'
-  }
 
   const onClickAddNewJob = () => {
-    dispatch(addJobTC(ONEjobTEST))
+    dispatch(addJobTC())
   }
   return (
     <div>

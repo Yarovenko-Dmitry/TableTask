@@ -1,61 +1,43 @@
 import {ProcessType} from '../Components/Process';
 import {Dispatch} from 'react';
 import {v1} from 'uuid';
+import {randomString} from '../util/randomString';
+import {randomNumber} from '../util/randomNumber';
 
 
-// const initialState: Array<ProcessType> = [];
+const initialState: Array<ProcessType> = [];
 
-const initialState: Array<ProcessType> = [
-  {
-    id: v1(), name: 'First',
-    startTime: 1,
-    jobsCount: 2
-  },
-  {
-    id: v1(), name: 'Second',
-    startTime: 3,
-    jobsCount: 4
-  },
-  {
-    id: v1(), name: 'Third',
-    startTime: 5,
-    jobsCount: 6
-  }
-]
-
-const ONEprocessTEST: ProcessType = {
-  id: '123',
-  name: 'ONEprocessTEST',
-  startTime: 111111111,
-  jobsCount: 22222222
-}
-
-export const processReducer = (state: Array<ProcessType> = initialState , action: ActionsType): Array<ProcessType> => {
+export const processReducer = (state: Array<ProcessType> = initialState, action: ActionsType): Array<ProcessType> => {
   switch (action.type) {
-    case 'ADD-PROCESS':{
-      // debugger
-      return [{...action.process}, ...state]
+    case 'ADD-PROCESS': {
+      const newProcess: ProcessType = {
+        id: v1(),
+        name: randomString(),
+        startTime: randomNumber(20, 94),
+        jobsCount: randomNumber(1, 10)
+      }
+      return [newProcess, ...state]
     }
-
-    case 'REMOVE-PROCESS':{ return state.filter(tl => tl.id != action.id)}
-
+    case 'REMOVE-PROCESS': {
+      return state.filter(tl => tl.id != action.id)
+    }
     default: {
-      // debugger
       return state
     }
-
   }
 }
 
-export const addProcessAC = (process: ProcessType) => ({type: 'ADD-PROCESS', process} as const)
+export const addProcessAC = () => ({type: 'ADD-PROCESS'} as const)
 export const removeProcessAC = (id: string) => ({type: 'REMOVE-PROCESS', id} as const)
 
-export const addProcessTC = (ONEprocessTEST: ProcessType) => {
-
+export const addProcessTC = () => {
   return (dispatch: ThunkDispatch) => {
-// debugger
-    dispatch(addProcessAC(ONEprocessTEST))
-    localStorage.setItem('my-data', JSON.stringify(ONEprocessTEST))
+    dispatch(addProcessAC())
+  }
+}
+export const removeProcessTC = (id: string) => {
+  return (dispatch: ThunkDispatch) => {
+    dispatch(removeProcessAC(id))
   }
 }
 
