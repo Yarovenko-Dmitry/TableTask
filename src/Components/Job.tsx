@@ -1,7 +1,7 @@
 import React from 'react';
 
 export type JobType = {
-  id: string
+  _id: string
   processId: string
   name: string
   status: StatusType
@@ -13,7 +13,7 @@ export const Job = (props: JobType) => {
 
   return (
     <div>
-      <div>{props.id}</div>
+      <div>{props._id}</div>
       <div> {props.processId}</div>
       <div>{props.name}</div>
       <div> {props.status}</div>

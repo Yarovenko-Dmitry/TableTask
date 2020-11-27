@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.FAILD_CLASS {
+  background-color: #eb9c9c;
+
+}
+.RUNNING_CLASS {
+  background-color: #6bb7d3;
+
+}
+.SUCCESSED_CLASS {
+  background-color: #61cc3a;
+
+}

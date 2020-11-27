@@ -1,19 +1,22 @@
 import {ProcessType} from '../Components/Process';
 import {Dispatch} from 'react';
-import {v1} from 'uuid';
-import {randomString} from '../util/randomString';
-import {randomNumber} from '../util/randomNumber';
-import {AddJobActionType, addJobTC, RemoveJobActionType, removeJobTC} from './jobs-reducer';
+import {AddJobActionType, RemoveJobActionType, removeJobTC} from './jobs-reducer';
+import {mainRequestProcesses} from '../api/api';
 
 const initialState: Array<ProcessType> = [];
 
 export const processReducer = (state: Array<ProcessType> = initialState, action: ActionsType): Array<ProcessType> => {
   switch (action.type) {
+
+    case 'SET-PROCESS': {
+      return action.data;
+    }
     case 'ADD-PROCESS': {
       return [action.newProcess, ...state];
     }
-    case 'REMOVE-PROCESS': {
-      return state.filter(tl => tl.id !== action.id);
+    case 'PROCESS/REMOVE-PROCESS': {
+      // return state.filter(tl => tl._id !== action.id);
+      return action.data;
     }
     default: {
       return state
@@ -21,33 +24,43 @@ export const processReducer = (state: Array<ProcessType> = initialState, action:
   }
 }
 
+export const setProcessListAC = (data: Array<ProcessType>) => ({type: 'SET-PROCESS', data} as const);
 export const addProcessAC = (newProcess: ProcessType) => ({type: 'ADD-PROCESS', newProcess} as const);
-export const removeProcessAC = (id: string) => ({type: 'REMOVE-PROCESS', id} as const);
+export const removeProcessAC = (data: Array<ProcessType>) => ({type: 'PROCESS/REMOVE-PROCESS', data} as const);
 
+export const getProcessTC = () => {
+  return async (dispatch: any) => {
+    const res = await mainRequestProcesses.getProcesses()
+    dispatch(setProcessListAC(res.data.processList))
+    console.log(res.data.processList)
+  }
+}
 export const addProcessTC = () => {
-  return (dispatch: any) => {
-    const newProcess: ProcessType = {
-      id: v1(),
-      name: randomString(),
-      startTime: randomNumber(20, 94),
-      jobsCount: randomNumber(1, 10)
-    }
-    dispatch(addProcessAC(newProcess));
-    dispatch(addJobTC(newProcess.id, newProcess.jobsCount));
+  // return (dispatch: ThunkAction<void, AppRootStateType, unknown, ActionsType>) => {
+  return async (dispatch: any) => {
+
+    const res = await mainRequestProcesses.addProcess()
+    console.log('res.data.processList', res)
+    dispatch(addProcessAC(res.data.obj));
   }
 }
 
 export const removeProcessTC = (id: string) => {
-  return (dispatch: any) => {
-    dispatch(removeProcessAC(id));
+   return async (dispatch: any) => {
+    debugger
+    const res = await mainRequestProcesses.removeProcess(id)
+    console.log('res DELITE  ', res)
+    dispatch(removeProcessAC(res.data.processList));
     dispatch(removeJobTC(id));
   }
 }
 
+export type SetProcessActionType = ReturnType<typeof setProcessListAC>;
 export type AddProcessActionType = ReturnType<typeof addProcessAC>;
 export type RemoveProcessActionType = ReturnType<typeof removeProcessAC>;
 
 type ActionsType =
+  | SetProcessActionType
   | AddProcessActionType
   | RemoveProcessActionType
   | AddJobActionType
@@ -55,4 +68,3 @@ type ActionsType =
 
 type ThunkDispatch = Dispatch<ActionsType>;
 
-// localStorage.setItem('my-data', JSON.stringify(ONEprocessTEST))

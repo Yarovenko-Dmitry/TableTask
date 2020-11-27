@@ -8,17 +8,14 @@ import {SearchOutlined} from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 
 export const JobTable = (props: any) => {
-  const jobsList = useSelector<AppRootStateType, Array<JobType>>((state) => state.jobs);
-  console.log('jobsList', jobsList);
+
   const filtredJobsList = useSelector<AppRootStateType, Array<JobType>>((state) =>
     state.jobs.filter(tl => tl.processId == props.currentRowId));
-  console.log('filtredJobsList', filtredJobsList);
 
   const inputEl = useRef(null)
 
   useEffect(() => {
     props.setcurrentRowId(props.currentRowId)
-    console.log('CurrentRowRd from Job Table', props.currentRowId)
   }, [])
 
   const [searchText, setSearchText] = useState<string>('');
@@ -92,8 +89,8 @@ export const JobTable = (props: any) => {
       dataIndex: 'id',
       key: 'id',
       sorter: (a: JobType, b: JobType) => {
-        if (a.id.toLowerCase() < b.id.toLowerCase()) return -1;
-        else if (a.id.toLowerCase() > b.id.toLowerCase()) return 1;
+        if (a._id.toLowerCase() < b._id.toLowerCase()) return -1;
+        else if (a._id.toLowerCase() > b._id.toLowerCase()) return 1;
         return 0;
       },
       ellipsis: true,
@@ -140,7 +137,8 @@ export const JobTable = (props: any) => {
       render: (text: any, record: any) => <button
         name={'removeJob'}
         onClick={() => {
-          removeProcessTC(record.id)
+          debugger
+          removeProcessTC(record._id)
           console.log('recordKEY ', record.id)
         }}>Remove job</button>
     }
@@ -149,7 +147,7 @@ export const JobTable = (props: any) => {
   return (
     <div>
       <Table columns={columns}
-             rowKey={record => record.id}
+             rowKey={record => record._id}
              dataSource={filtredJobsList}
              pagination={false}
       />

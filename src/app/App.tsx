@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import {useDispatch} from 'react-redux';
-import {addProcessTC} from '../Redux/process-reducer';
+import {addProcessTC, getProcessTC} from '../Redux/process-reducer';
 import {ProcessTable} from '../Components/ProcessTable';
 
 // + просмотр списка процессов
@@ -10,7 +10,7 @@ import {ProcessTable} from '../Components/ProcessTable';
 // + сортировка процессов по всем полям
 // + поиск джобы по имени
 // + удаление процесса, включая все его джобы
-// - обозначение статуса Process
+// + обозначение статуса Process
 // - сохранение и загрузка данных с сервака или localStorage
 
 const App = () => {
@@ -21,12 +21,16 @@ const App = () => {
     setIsShowingProcessList(!isShowingProcessList)
   };
 
+  useEffect(()=>{
+    dispatch(getProcessTC())
+  }, [dispatch])
+
   const OnClickAddProcess = () => {
     dispatch(addProcessTC())
   };
 
   // const onClickAddNewJob = () => {
-  //   // dispatch(addJobTC())
+  //
   // };
 
   return (

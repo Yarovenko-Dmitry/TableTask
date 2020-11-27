@@ -5,13 +5,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../app/store';
 import {JobTable} from './JobTable';
 import {removeProcessTC} from '../Redux/process-reducer';
+import {JobType} from './Job';
 
 export const ProcessTable = () => {
   const dispatch = useDispatch()
   const processList = useSelector<AppRootStateType, Array<ProcessType>>((state) => state.process);
+  console.log('processList ', processList)
+  const jobs = useSelector<AppRootStateType, Array<JobType>>((state) => state.jobs);
 
   const [currentRowId, setcurrentRowId] = useState<string>('');
-  // console.log('CurrentRowRd from Process Table', currentRowId)
 
   const columns: any = [
     {
@@ -47,13 +49,33 @@ export const ProcessTable = () => {
       render: (text: any, record: any) => <button
         name={'removeProcess'}
         onClick={() => {
-          dispatch(removeProcessTC(record.id))
-          console.log('recordKEY ', record.id)
+          dispatch(removeProcessTC(record._id))
+          console.log('recordKEY ', record._id)
         }}>Remove process</button>
     },
   ];
   const onChange = (sorter: any) => {
     console.log('params', sorter);
+  }
+
+  const paintRow = (record: ProcessType, index: any): string => {
+    let runningCount: number = 0;
+
+    for (let i = 0; i < jobs.length; i++) {
+      let j = jobs[i];
+      if (j.processId === record._id) {
+        if (j.status === 'failed') {
+          return 'FAILD_CLASS'
+        }
+        if (j.status === 'running') {
+          runningCount += 1
+        }
+      }
+    }
+    if (runningCount) {
+      return 'RUNNING_CLASS'
+    }
+    return 'SUCCESSED_CLASS'
   }
 
   return (
@@ -63,16 +85,17 @@ export const ProcessTable = () => {
       <Table dataSource={processList}
              columns={columns}
              onChange={onChange}
-             rowKey={record => record.id}
+             rowKey={record => record._id}
              expandable={{
                expandedRowRender: record => <JobTable setcurrentRowId={setcurrentRowId}
-                                                      currentRowId={record.id}
-                                                      processId={record.id}
+                                                      currentRowId={record._id}
+                                                      processId={record._id}
                                                       jobsCountNumber={+record.jobsCount}/>,
                rowExpandable: record => record.name !== 'Not Expandable',
                expandRowByClick: false
              }}
              pagination={false}
+             rowClassName={paintRow}
       />
     </div>
   )

@@ -1,52 +1,43 @@
 import {Dispatch} from 'react';
-import {v1} from 'uuid';
 import {JobType, StatusType} from '../Components/Job';
-import {randomString} from '../util/randomString';
-import {randomNumber} from '../util/randomNumber';
+import {mainRequestJobs} from '../api/api';
 
 const initialState: Array<JobType> = [];
 const jobStatus: Array<StatusType> = ['running', 'successed', 'failed'];
 
 export const jobsReducer = (state: Array<JobType> = initialState, action: ActionsType): Array<JobType> => {
   switch (action.type) {
-    case 'ADD-JOB': {
-      const resultState = [action.newJob, ...state];
-      return resultState;
+    case 'SET-JOB': {
+      return action.jobList;
     }
     case 'REMOVE-JOB': {
-      debugger
-      const resultState = state.filter(tl => tl.processId !== action.processId);
-      return resultState;
+      return action.jobList;
     }
     default: {
       return state;
     }
   }
 }
-export const addJobAC = (newJob: JobType) => ({type: 'ADD-JOB', newJob} as const)
-export const removeJobAC = (processId: string) => ({type: 'REMOVE-JOB', processId} as const)
+export const setJobAC = (jobList: Array<JobType>) => ({type: 'SET-JOB', jobList} as const)
+export const removeJobAC = (jobList: Array<JobType>) => ({type: 'REMOVE-JOB',  jobList} as const)
 
-export const addJobTC = (processId: string, newProcessJobsCount: number) => {
-  return (dispatch: ThunkDispatch) => {
-    for (let i = 0; i < newProcessJobsCount; i++) {
-      const newJob: JobType = {
-        id: v1(),
-        processId: processId,
-        name: randomString(),
-        status: jobStatus[randomNumber(0, 2)],
-      }
-      dispatch(addJobAC(newJob))
-    }
+export const gerJobListTC = () => {
+  return async (dispatch: ThunkDispatch) => {
+    const res = await mainRequestJobs.getJobs()
+    console.log(res.data.processList)
+      // dispatch(setJobAC(jobList))
   }
 }
 
 export const removeJobTC = (processId: string) => {
-  return (dispatch: ThunkDispatch) => {
-    dispatch(removeJobAC(processId))
+  return async (dispatch: ThunkDispatch) => {
+    const res = await mainRequestJobs.removeJobs(processId)
+    console.log(res.data.processList)
+    // dispatch(removeJobAC(jobList))
   }
 }
 
-export type AddJobActionType = ReturnType<typeof addJobAC>;
+export type AddJobActionType = ReturnType<typeof setJobAC>;
 export type RemoveJobActionType = ReturnType<typeof removeJobAC>;
 
 type ActionsType =
