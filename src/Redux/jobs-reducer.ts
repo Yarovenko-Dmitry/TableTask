@@ -21,10 +21,10 @@ export const jobsReducer = (state: Array<JobType> = initialState, action: Action
 export const setJobAC = (jobList: Array<JobType>) => ({type: 'SET-JOB', jobList} as const)
 export const removeJobAC = (jobList: Array<JobType>) => ({type: 'REMOVE-JOB',  jobList} as const)
 
-export const gerJobListTC = () => {
+export const getJobListTC = () => {
   return async (dispatch: ThunkDispatch) => {
     const res = await mainRequestJobs.getJobs()
-    console.log(res.data.processList)
+    console.log('getJobListTC res', res)
       // dispatch(setJobAC(jobList))
   }
 }
@@ -32,7 +32,7 @@ export const gerJobListTC = () => {
 export const removeJobTC = (processId: string) => {
   return async (dispatch: ThunkDispatch) => {
     const res = await mainRequestJobs.removeJobs(processId)
-    console.log(res.data.processList)
+    console.log('removeJobTC res', res)
     // dispatch(removeJobAC(jobList))
   }
 }

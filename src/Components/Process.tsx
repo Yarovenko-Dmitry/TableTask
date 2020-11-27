@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {gerJobListTC} from '../Redux/jobs-reducer';
+import {getJobListTC} from '../Redux/jobs-reducer';
 import {Job, JobType} from './Job';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../app/store';
@@ -20,7 +20,7 @@ export const Process = (props: ProcessType) => {
   }
 
   const onClickAddNewJob = () => {
-    // dispatch(gerJobListTC())
+    // dispatch(getJobListTC())
   }
   return (
     <div>

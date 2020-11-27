@@ -10,7 +10,7 @@ import {JobType} from './Job';
 export const ProcessTable = () => {
   const dispatch = useDispatch()
   const processList = useSelector<AppRootStateType, Array<ProcessType>>((state) => state.process);
-  console.log('processList ', processList)
+  // console.log('processList ', processList)
   const jobs = useSelector<AppRootStateType, Array<JobType>>((state) => state.jobs);
 
   const [currentRowId, setcurrentRowId] = useState<string>('');
@@ -50,12 +50,12 @@ export const ProcessTable = () => {
         name={'removeProcess'}
         onClick={() => {
           dispatch(removeProcessTC(record._id))
-          console.log('recordKEY ', record._id)
+          // console.log('recordKEY ', record._id)
         }}>Remove process</button>
     },
   ];
   const onChange = (sorter: any) => {
-    console.log('params', sorter);
+    // console.log('params', sorter);
   }
 
   const paintRow = (record: ProcessType, index: any): string => {

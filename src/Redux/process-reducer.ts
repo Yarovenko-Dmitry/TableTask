@@ -1,6 +1,6 @@
 import {ProcessType} from '../Components/Process';
 import {Dispatch} from 'react';
-import {AddJobActionType, RemoveJobActionType, removeJobTC} from './jobs-reducer';
+import {AddJobActionType, getJobListTC, RemoveJobActionType, removeJobTC} from './jobs-reducer';
 import {mainRequestProcesses} from '../api/api';
 
 const initialState: Array<ProcessType> = [];
@@ -32,7 +32,8 @@ export const getProcessTC = () => {
   return async (dispatch: any) => {
     const res = await mainRequestProcesses.getProcesses()
     dispatch(setProcessListAC(res.data.processList))
-    console.log(res.data.processList)
+    dispatch(getJobListTC())
+    // console.log(res.data.processList)
   }
 }
 export const addProcessTC = () => {
@@ -40,17 +41,18 @@ export const addProcessTC = () => {
   return async (dispatch: any) => {
 
     const res = await mainRequestProcesses.addProcess()
-    console.log('res.data.processList', res)
+    // console.log('res.data.processList', res)
     dispatch(addProcessAC(res.data.obj));
+    dispatch(getJobListTC())
   }
 }
 
 export const removeProcessTC = (id: string) => {
    return async (dispatch: any) => {
-    debugger
     const res = await mainRequestProcesses.removeProcess(id)
-    console.log('res DELITE  ', res)
+    // console.log('res DELITE  ', res)
     dispatch(removeProcessAC(res.data.processList));
+    debugger
     dispatch(removeJobTC(id));
   }
 }

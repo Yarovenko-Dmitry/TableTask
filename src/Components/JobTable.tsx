@@ -137,9 +137,9 @@ export const JobTable = (props: any) => {
       render: (text: any, record: any) => <button
         name={'removeJob'}
         onClick={() => {
-          debugger
+          // debugger
           removeProcessTC(record._id)
-          console.log('recordKEY ', record.id)
+          // console.log('recordKEY ', record.id)
         }}>Remove job</button>
     }
   ];
