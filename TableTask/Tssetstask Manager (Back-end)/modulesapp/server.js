@@ -1,6 +1,4 @@
 const express = require('express');
-const config = require('config');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const connectDB = require("./db");
 const cors = require('cors');
@@ -22,8 +20,6 @@ cors({origin: 'http://localhost:3000'})
 app.use('/processes', require('./process.routers'));
 app.use('/jobs', require('./job.routers'));
 
-// http://localhost:4000/process/
-
 const start = async () => {
   try {
     await connectDB()
@@ -36,6 +32,6 @@ const start = async () => {
 
 
 start()
-module.exports.app= app
+module.exports.app = app
 
 // http://localhost:4000/processes/process

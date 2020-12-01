@@ -30,10 +30,8 @@ export const removeJobAC = (jobList: Array<JobType>) => ({type: 'REMOVE-JOB',  j
 
 export const getJobListTC = () => {
   return async (dispatch: ThunkDispatch) => {
-    const res = await mainRequestJobs.getJobs()
-    console.log('getJobListTC res', res)
-      dispatch(setJobAC(res.data.jobList.reverse()))
-    console.log('getJobListTC res.data.jobList', res.data.jobList)
+    const res = await mainRequestJobs.getJobs();
+      dispatch(setJobAC(res.data.jobList.reverse()));
   }
 }
 

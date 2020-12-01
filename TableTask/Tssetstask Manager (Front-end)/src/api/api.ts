@@ -14,6 +14,7 @@ export const mainRequestProcesses = {
     return instance.get(`processes/`);
   },
   addProcess() {
+    // debugger
     return instance.post(`processes/process/`)
   },
   removeProcess(id: string) {

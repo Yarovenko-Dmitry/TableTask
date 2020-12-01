@@ -2,10 +2,6 @@ const {getJob, deleteJob} = require('./providers/job');
 const {Router} = require('express');
 const router = Router();
 
-// router.get('/', async (req, res) => {
-//   await getJob(req, res)
-// })
-
 router.get('/', async (req, res) => {
   await getJob(req, res)
 })

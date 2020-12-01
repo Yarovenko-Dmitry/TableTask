@@ -23,7 +23,12 @@ const App = () => {
   };
 
   useEffect(()=>{
-    dispatch(getProcessTC())
+
+    setInterval(()=>{
+      dispatch(getProcessTC());
+      console.log('ёу')
+    }, 600*1000)
+
   }, [dispatch])
 
   const OnClickAddProcess = () => {

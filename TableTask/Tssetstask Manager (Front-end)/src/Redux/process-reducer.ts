@@ -36,25 +36,29 @@ export const removeProcessAC = (data: Array<ProcessType>) => ({type: 'PROCESS/RE
 
 export const getProcessTC = () => {
   return async (dispatch: any) => {
-    const res = await mainRequestProcesses.getProcesses()
-    dispatch(setProcessListAC(res.data.processList.reverse()))
-    dispatch(getJobListTC())
-    console.log('res.data.processList ', res.data.processList)
+    const res = await mainRequestProcesses.getProcesses();
+    dispatch(setProcessListAC(res.data.processList.reverse()));
+    dispatch(getJobListTC());
+
   }
 }
 export const addProcessTC = () => {
   // return (dispatch: ThunkAction<void, AppRootStateType, unknown, ActionsType>) => {
   return async (dispatch: any) => {
     const res = await mainRequestProcesses.addProcess();
-    dispatch(getProcessTC());
+    if (res.status === 201) {
+      dispatch(getProcessTC());
+    }
+
   }
 }
 
 export const removeProcessTC = (id: string) => {
   return async (dispatch: any) => {
-    const res = await mainRequestProcesses.removeProcess(id)
-    console.log('res DELITE  ', res)
-    dispatch(getProcessTC());
+    const res = await mainRequestProcesses.removeProcess(id);
+    if (res.status === 201) {
+      dispatch(getProcessTC());
+    }
   }
 }
 
