@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const connectDB = require("./db");
+const connectDB = require("./db/db");
 const cors = require('cors');
 
 const app = express();
@@ -17,8 +17,8 @@ app.use(function (req, res, next) {
   next();
 })
 cors({origin: 'http://localhost:3000'})
-app.use('/processes', require('./process.routers'));
-app.use('/jobs', require('./job.routers'));
+app.use('/processes', require('./controllers/process.controller'));
+app.use('/jobs', require('./controllers/job.controller'));
 
 const start = async () => {
   try {

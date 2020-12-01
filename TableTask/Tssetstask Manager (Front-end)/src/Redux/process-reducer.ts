@@ -42,6 +42,7 @@ export const getProcessTC = () => {
 
   }
 }
+
 export const addProcessTC = () => {
   // return (dispatch: ThunkAction<void, AppRootStateType, unknown, ActionsType>) => {
   return async (dispatch: any) => {

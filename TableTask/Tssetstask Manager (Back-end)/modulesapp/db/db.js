@@ -1,11 +1,10 @@
 const mongoose = require('mongoose');
-const config = require('config');
-const db = config.get('mongoURL')
 
+const MONGO_URL = process.env.MONGO_URL || "mongodb+srv://test1:test123test@cluster0.erpqz.mongodb.net/TasksManagerDB?retryWrites=true&w=majority"
 
 module.exports = connectDB = async () => {
   try {
-    await mongoose.connect(db, {
+    await mongoose.connect(MONGO_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       // useCreateIndex: true,

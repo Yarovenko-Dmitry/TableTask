@@ -16,19 +16,23 @@ import {ProcessTable} from '../Components/ProcessTable';
 
 const App = () => {
   const dispatch = useDispatch();
+  const [intervalId, setIntervalId] = useState<number>(0)
 
   const [isShowingProcessList, setIsShowingProcessList] = useState<boolean>(false);
   const showProcessList = () => {
     setIsShowingProcessList(!isShowingProcessList)
   };
 
-  useEffect(()=>{
-
-    setInterval(()=>{
+  useEffect(() => {
+    dispatch(getProcessTC());
+    clearInterval(intervalId)
+    const id = setInterval(() => {
       dispatch(getProcessTC());
-      console.log('ёу')
-    }, 600*1000)
-
+    }, 600 * 1000)
+    setIntervalId(+id)
+    return () => {
+      clearInterval(intervalId)
+    }
   }, [dispatch])
 
   const OnClickAddProcess = () => {
