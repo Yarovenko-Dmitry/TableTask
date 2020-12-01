@@ -10,9 +10,7 @@ import {JobType} from '../Redux/jobs-reducer';
 export const ProcessTable = () => {
   const dispatch = useDispatch()
   const processList = useSelector<AppRootStateType, Array<ProcessType>>((state) => state.process);
-  // console.log('processList ', processList)
   const jobs = useSelector<AppRootStateType, Array<JobType>>((state) => state.jobs);
-
   const [currentRowId, setcurrentRowId] = useState<string>('');
 
   const columns: any = [
@@ -60,8 +58,7 @@ export const ProcessTable = () => {
       render: (text: any, record: any) => <button
         name={'removeProcess'}
         onClick={() => {
-          dispatch(removeProcessTC(record._id))
-          // console.log('recordKEY ', record._id)
+          dispatch(removeProcessTC(record._id));
         }}>Remove process</button>
     },
   ];

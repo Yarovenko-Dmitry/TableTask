@@ -10,7 +10,6 @@ export type JobType = {
 export type StatusType = 'running' | 'successed' | 'failed'
 
 const initialState: Array<JobType> = [];
-const jobStatus: Array<StatusType> = ['running', 'successed', 'failed'];
 
 export const jobsReducer = (state: Array<JobType> = initialState, action: ActionsType): Array<JobType> => {
   switch (action.type) {
@@ -38,13 +37,13 @@ export const getJobListTC = () => {
   }
 }
 
-export const removeJobTC = (processId: string) => {
-  return async (dispatch: ThunkDispatch) => {
-    const res = await mainRequestJobs.removeJobs(processId)
-    console.log('removeJobTC res', res)
-    // dispatch(removeJobAC(jobList))
-  }
-}
+// export const removeJobTC = (processId: string) => {
+//   return async (dispatch: ThunkDispatch) => {
+//     const res = await mainRequestJobs.removeJobs(processId)
+//     console.log('removeJobTC res', res)
+//     // dispatch(removeJobAC(jobList))
+//   }
+// }
 
 export type AddJobActionType = ReturnType<typeof setJobAC>;
 export type RemoveJobActionType = ReturnType<typeof removeJobAC>;

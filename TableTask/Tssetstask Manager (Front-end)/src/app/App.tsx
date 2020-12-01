@@ -11,7 +11,8 @@ import {ProcessTable} from '../Components/ProcessTable';
 // + поиск джобы по имени
 // + удаление процесса, включая все его джобы
 // + обозначение статуса Process
-// - сохранение и загрузка данных с сервака или localStorage
+// + сохранение и загрузка данных с сервака или localStorage
+// - обновление данных каждый интервал (10 мин)
 
 const App = () => {
   const dispatch = useDispatch();
@@ -29,10 +30,6 @@ const App = () => {
     dispatch(addProcessTC())
   };
 
-  // const onClickAddNewJob = () => {
-  //
-  // };
-
   return (
     <div className="App">
       <input type={'button'}
@@ -46,11 +43,6 @@ const App = () => {
                value={'Add process'}
                onClick={OnClickAddProcess}
         />
-        {/*<input type={'button'}*/}
-        {/*       name={'addNewJob'}*/}
-        {/*       value={'Add new job'}*/}
-        {/*       onClick={onClickAddNewJob}*/}
-        {/*/>*/}
         <ProcessTable/>
       </div>
       }

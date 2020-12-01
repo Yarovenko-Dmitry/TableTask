@@ -11,8 +11,7 @@ export const JobTable = (props: any) => {
 
   const filtredJobsList = useSelector<AppRootStateType, Array<JobType>>((state) =>
     state.jobs.filter(tl => tl.processId === props.currentRowId));
-  console.log('filtredJobsList ', filtredJobsList)
-// debugger;
+
   const inputEl = useRef(null)
 
   useEffect(() => {
@@ -130,19 +129,19 @@ export const JobTable = (props: any) => {
       },
       ellipsis: true,
     },
-    {
-      title: 'Remove job',
-      dataIndex: 'removeJob',
-      key: 'removeJob',
-
-      render: (text: any, record: any) => <button
-        name={'removeJob'}
-        onClick={() => {
-          // debugger
-          removeProcessTC(record._id)
-          // console.log('recordKEY ', record.id)
-        }}>Remove job</button>
-    }
+    // {
+    //   title: 'Remove job',
+    //   dataIndex: 'removeJob',
+    //   key: 'removeJob',
+    //
+    //   render: (text: any, record: any) => <button
+    //     name={'removeJob'}
+    //     onClick={() => {
+    //       // debugger
+    //       removeProcessTC(record._id)
+    //       // console.log('recordKEY ', record.id)
+    //     }}>Remove job</button>
+    // }
   ];
 
   return (

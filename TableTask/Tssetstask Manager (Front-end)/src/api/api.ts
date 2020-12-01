@@ -28,7 +28,7 @@ export const mainRequestJobs = {
   // addJobs(processId: string) {
   //   return instance.post(`jobs/job/` + processId)
   // },
-  removeJobs(processId: string) {
-    return instance.post(`jobs/job/` + processId);
-  },
+  // removeJobs(processId: string) {
+  //   return instance.post(`jobs/job/` + processId);
+  // },
 }
