@@ -1,15 +1,9 @@
 import React, {useState} from 'react';
-import {getJobListTC} from '../Redux/jobs-reducer';
-import {Job, JobType} from './Job';
+import {Job} from './Job';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../app/store';
-
-export type ProcessType = {
-  _id: string
-  name: string
-  startTime: number
-  jobsCount: number
-}
+import {ProcessType} from '../Redux/process-reducer';
+import {JobType} from '../Redux/jobs-reducer';
 
 export const Process = (props: ProcessType) => {
   const dispatch = useDispatch()

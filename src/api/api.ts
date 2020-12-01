@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {ProcessType} from '../Components/Process';
+
 
 const instance = axios.create({
   withCredentials: true,

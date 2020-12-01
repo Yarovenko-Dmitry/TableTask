@@ -1,13 +1,5 @@
 import React from 'react';
-
-export type JobType = {
-  _id: string
-  processId: string
-  name: string
-  status: StatusType
-}
-
-export type StatusType = 'running' | 'successed' | 'failed'
+import {JobType} from '../Redux/jobs-reducer';
 
 export const Job = (props: JobType) => {
 

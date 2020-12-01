@@ -2,16 +2,17 @@ import {Button, Input, Space, Table} from 'antd';
 import React, {useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {AppRootStateType} from '../app/store';
-import {JobType} from './Job';
 import {removeProcessTC} from '../Redux/process-reducer';
 import {SearchOutlined} from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
+import {JobType} from '../Redux/jobs-reducer';
 
 export const JobTable = (props: any) => {
 
   const filtredJobsList = useSelector<AppRootStateType, Array<JobType>>((state) =>
-    state.jobs.filter(tl => tl.processId == props.currentRowId));
-
+    state.jobs.filter(tl => tl.processId === props.currentRowId));
+  console.log('filtredJobsList ', filtredJobsList)
+// debugger;
   const inputEl = useRef(null)
 
   useEffect(() => {
@@ -86,8 +87,8 @@ export const JobTable = (props: any) => {
   const columns: any = [
     {
       title: 'Id',
-      dataIndex: 'id',
-      key: 'id',
+      dataIndex: '_id',
+      key: '_id',
       sorter: (a: JobType, b: JobType) => {
         if (a._id.toLowerCase() < b._id.toLowerCase()) return -1;
         else if (a._id.toLowerCase() > b._id.toLowerCase()) return 1;

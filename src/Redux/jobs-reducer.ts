@@ -1,6 +1,13 @@
 import {Dispatch} from 'react';
-import {JobType, StatusType} from '../Components/Job';
 import {mainRequestJobs} from '../api/api';
+
+export type JobType = {
+  _id: string
+  processId: string
+  name: string
+  status: StatusType
+}
+export type StatusType = 'running' | 'successed' | 'failed'
 
 const initialState: Array<JobType> = [];
 const jobStatus: Array<StatusType> = ['running', 'successed', 'failed'];
@@ -8,6 +15,7 @@ const jobStatus: Array<StatusType> = ['running', 'successed', 'failed'];
 export const jobsReducer = (state: Array<JobType> = initialState, action: ActionsType): Array<JobType> => {
   switch (action.type) {
     case 'SET-JOB': {
+      // debugger;
       return action.jobList;
     }
     case 'REMOVE-JOB': {
@@ -25,7 +33,8 @@ export const getJobListTC = () => {
   return async (dispatch: ThunkDispatch) => {
     const res = await mainRequestJobs.getJobs()
     console.log('getJobListTC res', res)
-      // dispatch(setJobAC(jobList))
+      dispatch(setJobAC(res.data.jobList.reverse()))
+    console.log('getJobListTC res.data.jobList', res.data.jobList)
   }
 }
 

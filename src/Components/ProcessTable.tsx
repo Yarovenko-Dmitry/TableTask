@@ -1,11 +1,11 @@
 import {Space, Table} from 'antd';
 import React, {useState} from 'react';
-import {ProcessType} from './Process';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../app/store';
 import {JobTable} from './JobTable';
-import {removeProcessTC} from '../Redux/process-reducer';
-import {JobType} from './Job';
+import {ProcessType, removeProcessTC} from '../Redux/process-reducer';
+import {JobType} from '../Redux/jobs-reducer';
+
 
 export const ProcessTable = () => {
   const dispatch = useDispatch()
@@ -16,6 +16,17 @@ export const ProcessTable = () => {
   const [currentRowId, setcurrentRowId] = useState<string>('');
 
   const columns: any = [
+    {
+      title: 'Id',
+      dataIndex: '_id',
+      key: '_id',
+      sorter: (a: ProcessType, b: ProcessType) => {
+        if (a._id.toLowerCase() < b._id.toLowerCase()) return -1;
+        else if (a._id.toLowerCase() > b._id.toLowerCase()) return 1;
+        return 0;
+      },
+      ellipsis: true,
+    },
     {
       title: 'Name',
       dataIndex: 'name',
